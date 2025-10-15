@@ -1,0 +1,782 @@
+{
+	"info": {
+		"_postman_id": "f2135410-d162-49c3-b819-0f1473f114ac",
+		"name": "product-api - tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "1330208"
+	},
+	"item": [
+		{
+			"name": "/category",
+			"item": [
+				{
+					"name": "POST save category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"categoryId\", pm.response.json().id);",
+									"pm.test(\"Response status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Check if the response data contains specified values\", function () {",
+									"    var responseData = pm.response.json();",
+									"    pm.expect(responseData).to.include({",
+									"        \"nome\": \"Lavadoras\"",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Lavadoras\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8081/category"
+					},
+					"response": []
+				},
+				{
+					"name": "GET all categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check HTTP status code and validate array for specific object\", function () {",
+									"    // Verifica se o HTTP status code é 200",
+									"    pm.response.to.have.status(200);",
+									"",
+									"    // Obtém os dados da resposta",
+									"    var responseData = pm.response.json();",
+									"",
+									"    // Define o objeto esperado",
+									"    const expectedObject = { nome: \"Lavadoras\" };",
+									"",
+									"    // Variável para verificar se o objeto existe no array",
+									"    let objectFound = responseData.some(item => item.nome === expectedObject.nome);",
+									"",
+									"    // Valida se o objeto foi encontrado",
+									"    pm.expect(objectFound).to.be.true;",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8081/category"
+					},
+					"response": []
+				},
+				{
+					"name": "GET categories paginated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check HTTP status code and validate array for specific object\", function () {",
+									"    // Verifica se o HTTP status code é 200",
+									"    pm.response.to.have.status(200);",
+									"",
+									"    // Obtém os dados da resposta",
+									"    var responseData = pm.response.json();",
+									"",
+									"    // Define o objeto esperado",
+									"    const expectedObject = { nome: \"Lavadoras\" };",
+									"",
+									"    // Variável para verificar se o objeto existe no array",
+									"    let objectFound = responseData.content.some(item => item.nome === expectedObject.nome);",
+									"",
+									"    // Valida se o objeto foi encontrado",
+									"    pm.expect(objectFound).to.be.true;",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/category/pageable?page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"category",
+								"pageable"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT update category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check if the response data contains specified values\", function () {",
+									"    var responseData = pm.response.json();",
+									"    pm.expect(responseData).to.include({",
+									"        \"nome\": \"Refrigerador\"",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Refrigerador\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8081/category/{{categoryId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8081/category/{{categoryId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE category outra vez",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 500\", function () {",
+									"    pm.response.to.have.status(500);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8081/category/{{categoryId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "POST save category for product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"categoryId\", pm.response.json().id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Relógios\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8081/category"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/product",
+			"item": [
+				{
+					"name": "POST save product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"productId\", pm.response.json().id);",
+									"pm.collectionVariables.set(\"productIdentifier\", pm.response.json().productIdentifier);",
+									"pm.test(\"Response status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Check if response object contains specific values\", function () {",
+									"    // Obtém os dados da resposta",
+									"    var responseData = pm.response.json();",
+									"",
+									"    // Define os valores esperados",
+									"    const expectedValues = {",
+									"        nome: \"Galaxy Watch\",",
+									"        preco: 2000.0,",
+									"        descricao: \"Uma televisão moderna\",",
+									"        category: {",
+									"            id: \"6760b2e6fb9c0b1c34b016da\",",
+									"            nome: \"Relógios\"",
+									"        }",
+									"    };",
+									"",
+									"    // Valida os campos principais",
+									"    pm.expect(responseData.nome).to.eql(expectedValues.nome);",
+									"    pm.expect(responseData.preco).to.eql(expectedValues.preco);",
+									"    pm.expect(responseData.descricao).to.eql(expectedValues.descricao);",
+									"",
+									"    // Valida os campos do objeto aninhado \"category\"",
+									"    pm.expect(responseData.category).to.be.an(\"object\");",
+									"    pm.expect(responseData.category.nome).to.eql(expectedValues.category.nome);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productIdentifier\": \"smartwatch\",\n  \"nome\": \"Galaxy Watch\",\n  \"preco\": 2000.0,\n  \"descricao\": \"Uma televisão moderna\",\n  \"category\": {\n    \"id\":\"{{categoryId}}\"\n    }  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8081/product"
+					},
+					"response": []
+				},
+				{
+					"name": "GET all products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Check if response contains specific values\", function () {",
+									"    // Obtém os dados da resposta",
+									"    var responseData = pm.response.json();",
+									"",
+									"    // Define os valores esperados",
+									"    const expectedValues = {",
+									"        nome: \"Galaxy Watch\",",
+									"        preco: 2000.0,",
+									"        descricao: \"Uma televisão moderna\",",
+									"        category: {",
+									"            nome: \"Relógios\"",
+									"        }",
+									"    };",
+									"",
+									"    // Variável para verificar se pelo menos um registro possui os valores esperados",
+									"    let recordFound = responseData.some(record => ",
+									"        record.nome === expectedValues.nome &&",
+									"        record.preco === expectedValues.preco &&",
+									"        record.descricao === expectedValues.descricao &&",
+									"        record.category &&",
+									"        record.category.nome === expectedValues.category.nome",
+									"    );",
+									"",
+									"    // Valida se o registro foi encontrado",
+									"    pm.expect(recordFound).to.be.true;",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8081/product"
+					},
+					"response": []
+				},
+				{
+					"name": "GET product by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check if response object contains specific values\", function () {",
+									"    // Obtém os dados da resposta",
+									"    var responseData = pm.response.json();",
+									"",
+									"    // Obtém o valor da variável \"categoryId\" do ambiente",
+									"    const categoryId = pm.collectionVariables.get(\"categoryId\");",
+									"    const productIdentifier = pm.collectionVariables.get(\"productIdentifier\");",
+									"",
+									"    // Define os valores esperados",
+									"    const expectedValues = {",
+									"        nome: \"Galaxy Watch\",",
+									"        productIdentifier: productIdentifier,",
+									"        preco: 2000.0,",
+									"        descricao: \"Uma televisão moderna\",",
+									"        category: {",
+									"            id: categoryId,",
+									"            nome: \"Relógios\"",
+									"        }",
+									"    };",
+									"",
+									"    // Valida os campos principais",
+									"    pm.expect(responseData.nome).to.eql(expectedValues.nome);",
+									"    pm.expect(responseData.productIdentifier).to.eql(expectedValues.productIdentifier);",
+									"    pm.expect(responseData.preco).to.eql(expectedValues.preco);",
+									"    pm.expect(responseData.descricao).to.eql(expectedValues.descricao);",
+									"",
+									"    // Valida os campos do objeto aninhado \"category\"",
+									"    pm.expect(responseData.category).to.be.an(\"object\");",
+									"    pm.expect(responseData.category.id).to.eql(expectedValues.category.id);",
+									"    pm.expect(responseData.category.nome).to.eql(expectedValues.category.nome);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8081/product/{{productId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT update product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check if response object contains specific values\", function () {",
+									"    // Obtém os dados da resposta",
+									"    var responseData = pm.response.json();",
+									"",
+									"    // Obtém o valor da variável \"categoryId\" do ambiente",
+									"    const categoryId = pm.collectionVariables.get(\"categoryId\");",
+									"    const productIdentifier = pm.collectionVariables.get(\"productIdentifier\");",
+									"",
+									"    // Define os valores esperados",
+									"    const expectedValues = {",
+									"        nome: \"Apple Watch\",",
+									"        productIdentifier: productIdentifier,",
+									"        preco: 6000.0,",
+									"        descricao: \"Entrou a maça, mudou o preço\",",
+									"        category: {",
+									"            id: categoryId,",
+									"            nome: \"Relógios\"",
+									"        }",
+									"    };",
+									"",
+									"    // Valida os campos principais",
+									"    pm.expect(responseData.nome).to.eql(expectedValues.nome);",
+									"    pm.expect(responseData.productIdentifier).to.eql(expectedValues.productIdentifier);",
+									"    pm.expect(responseData.preco).to.eql(expectedValues.preco);",
+									"    pm.expect(responseData.descricao).to.eql(expectedValues.descricao);",
+									"",
+									"    // Valida os campos do objeto aninhado \"category\"",
+									"    pm.expect(responseData.category).to.be.an(\"object\");",
+									"    pm.expect(responseData.category.id).to.eql(expectedValues.category.id);",
+									"    pm.expect(responseData.category.nome).to.eql(expectedValues.category.nome);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Apple Watch\",\n  \"preco\": 6000.0,\n  \"descricao\": \"Entrou a maça, mudou o preço\",\n  \"category\": {\n    \"id\": \"{{categoryId}}\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8081/product/{{productId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "GET products paginated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Check if array contains an object with specific values\", function () {",
+									"    // Obtém os dados da resposta (array de objetos)",
+									"    var responseData = pm.response.json();",
+									"",
+									"    // Define os valores esperados",
+									"    const expectedValues = {",
+									"        nome: \"Apple Watch\",",
+									"        preco: 6000.0,",
+									"        descricao: \"Entrou a maça, mudou o preço\",",
+									"        category: {",
+									"            nome: \"Relógios\"",
+									"        }",
+									"    };",
+									"",
+									"    // Variável para verificar se existe um objeto com os valores esperados",
+									"    let objectFound = responseData.content.some(item => ",
+									"        item.nome === expectedValues.nome &&",
+									"        item.preco === expectedValues.preco &&",
+									"        item.descricao === expectedValues.descricao &&",
+									"        item.category &&",
+									"        item.category.nome === expectedValues.category.nome",
+									"    );",
+									"",
+									"    // Valida se o objeto foi encontrado",
+									"    pm.expect(objectFound).to.be.true;",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/product/pageable?page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"product",
+								"pageable"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET product by identifier",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check if response object contains specific values\", function () {",
+									"    // Obtém os dados da resposta",
+									"    var responseData = pm.response.json();",
+									"",
+									"    // Define os valores esperados",
+									"    const expectedValues = {",
+									"        nome: \"Apple Watch\",",
+									"        preco: 6000.0,",
+									"        descricao: \"Entrou a maça, mudou o preço\",",
+									"        category: {",
+									"            nome: \"Relógios\"",
+									"        }",
+									"    };",
+									"",
+									"    // Valida os campos principais",
+									"    pm.expect(responseData.nome).to.eql(expectedValues.nome);",
+									"    pm.expect(responseData.preco).to.eql(expectedValues.preco);",
+									"    pm.expect(responseData.descricao).to.eql(expectedValues.descricao);",
+									"",
+									"    // Valida os campos do objeto aninhado \"category\"",
+									"    pm.expect(responseData.category).to.be.an(\"object\");",
+									"    pm.expect(responseData.category.nome).to.eql(expectedValues.category.nome);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8081/product/identifier/{{productIdentifier}}"
+					},
+					"response": []
+				},
+				{
+					"name": "GET products by category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Check if array contains an object with specific values\", function () {",
+									"    // Obtém os dados da resposta (array de objetos)",
+									"    var responseData = pm.response.json();",
+									"",
+									"    // Define os valores esperados",
+									"    const expectedValues = {",
+									"        nome: \"Apple Watch\",",
+									"        preco: 6000.0,",
+									"        descricao: \"Entrou a maça, mudou o preço\",",
+									"        category: {",
+									"            nome: \"Relógios\"",
+									"        }",
+									"    };",
+									"",
+									"    // Variável para verificar se existe um objeto com os valores esperados",
+									"    let objectFound = responseData.some(item => ",
+									"        item.nome === expectedValues.nome &&",
+									"        item.preco === expectedValues.preco &&",
+									"        item.descricao === expectedValues.descricao &&",
+									"        item.category &&",
+									"        item.category.nome === expectedValues.category.nome",
+									"    );",
+									"",
+									"    // Valida se o objeto foi encontrado",
+									"    pm.expect(objectFound).to.be.true;",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8081/product/category/{{categoryId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8081/product/{{productId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE product outra vez",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 500\", function () {",
+									"    pm.response.to.have.status(500);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8081/product/{{productId}}"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "productPort",
+			"value": "8080"
+		},
+		{
+			"key": "categoryId",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "productId",
+			"value": ""
+		},
+		{
+			"key": "productIdentifier",
+			"value": ""
+		}
+	]
+}
