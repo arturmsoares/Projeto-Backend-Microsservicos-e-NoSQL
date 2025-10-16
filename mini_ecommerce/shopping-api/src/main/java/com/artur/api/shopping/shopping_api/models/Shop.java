@@ -24,23 +24,24 @@ public class Shop {
     private String id;
     @Field("userIdentifier")
     private String userIdentifier;
-    
+    @Field("date")
     private LocalDate date;
+    @Field("items")
     private List<Item> items;
     @Field("total")
     private double total;
 
-
     public static Shop convert(ShopDTO shopDTO) {
         Shop shop = new Shop();
+        shop.setId(shopDTO.getId());
         shop.setUserIdentifier(shopDTO.getUserIdentifier());
-        shop.setTotal(shopDTO.getTotal());
         shop.setDate(shopDTO.getDate());
         shop.setItems(shopDTO.getItems()
                 .stream()
                 .map(Item::convert)
                 .collect(Collectors.toList()));
+        shop.setTotal(shopDTO.getTotal());
         return shop;
     }
-    
+
 }

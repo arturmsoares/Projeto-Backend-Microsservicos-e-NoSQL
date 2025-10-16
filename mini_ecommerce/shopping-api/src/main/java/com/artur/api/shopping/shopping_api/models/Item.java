@@ -1,6 +1,5 @@
 package com.artur.api.shopping.shopping_api.models;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.artur.api.shopping.shopping_api.models.dto.ItemDTO;
@@ -14,8 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Item {
 
-    @Id
-    private String id;
     @Field("productIdentifier")
     private String productIdentifier;
     @Field("price")

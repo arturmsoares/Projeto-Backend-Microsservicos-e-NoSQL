@@ -27,6 +27,7 @@ public class ProductDTO {
     public static ProductDTO convert(Product product) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());
+        productDTO.setProductIdentifier(product.getProductIdentifier());
         productDTO.setNome(product.getNome());
         productDTO.setDescricao(product.getDescricao());
         productDTO.setPreco(product.getPreco());

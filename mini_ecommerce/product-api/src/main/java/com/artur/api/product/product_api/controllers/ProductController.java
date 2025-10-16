@@ -63,8 +63,9 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductByCategoryId(categoryId));
     }
 
-    // @GetMapping("/{productIdentifier}")
-    // public ResponseEntity<ProductDTO> findByIdentifier(@PathVariable String productIdentifier) {
-    //     return ResponseEntity.ok(productService.findByProductIdentifier(productIdentifier));
-    // }
+    @GetMapping("/identifier/{productIdentifier}")
+    public ResponseEntity<ProductDTO> findByIdentifier(@PathVariable String productIdentifier) {
+        ProductDTO productDTO = productService.findByProductIdentifier(productIdentifier);
+        return ResponseEntity.ok(productDTO);
+    }
 }

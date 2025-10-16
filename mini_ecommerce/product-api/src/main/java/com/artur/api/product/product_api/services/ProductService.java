@@ -47,7 +47,7 @@ public class ProductService {
         if (product != null) {
             return ProductDTO.convert(product);
         }
-        throw new RuntimeException("Produto não encontrado para o identificador: " + productIdentifier);
+        return null;
     }
 
     public ProductDTO save(ProductDTO productDTO) {

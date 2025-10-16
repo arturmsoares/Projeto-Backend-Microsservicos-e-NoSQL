@@ -36,6 +36,8 @@ public class Product {
 
     public static Product convert(ProductDTO productDTO) {
         Product product = new Product();
+        product.setId(productDTO.getId());
+        product.setProductIdentifier(productDTO.getProductIdentifier());
         product.setNome(productDTO.getNome());
         product.setDescricao(productDTO.getDescricao());
         product.setPreco(productDTO.getPreco());

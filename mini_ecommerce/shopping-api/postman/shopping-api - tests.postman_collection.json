@@ -1,0 +1,798 @@
+{
+	"info": {
+		"_postman_id": "e35814a1-c5ea-4428-b2c9-4b299fa41a90",
+		"name": "shopping-api - tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "1330208"
+	},
+	"item": [
+		{
+			"name": "POST save shop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"shopId\", pm.response.json().id);",
+							"pm.test(\"Response status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Check if the response contains specified values and items\", function () {",
+							"    var responseData = pm.response.json();",
+							"",
+							"    // Verifica o valor de \"userIdentifier\"",
+							"    pm.expect(responseData.userIdentifier).to.eql(\"montanha\");",
+							"",
+							"    // Verifica os itens dentro do array \"items\"",
+							"    const expectedItems = [",
+							"        { productIdentifier: \"avalicao\", price: 100.0 },",
+							"        { productIdentifier: \"prova\", price: 200.0 },",
+							"        { productIdentifier: \"teste\", price: 150.0 }",
+							"    ];",
+							"",
+							"    // Certifique-se de que o array \"items\" tem o mesmo tamanho",
+							"    pm.expect(responseData.items.length).to.eql(expectedItems.length);",
+							"",
+							"    // Valida cada item individualmente",
+							"    for (let i = 0; i < expectedItems.length; i++) {",
+							"        pm.expect(responseData.items[i].productIdentifier).to.eql(expectedItems[i].productIdentifier);",
+							"        pm.expect(responseData.items[i].price).to.eql(expectedItems[i].price);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"userIdentifier\": \"montanha\",\n  \"items\": [\n    { \"productIdentifier\": \"avalicao\", \"price\": 100.0 },\n    { \"productIdentifier\": \"prova\", \"price\": 200.0 },\n    { \"productIdentifier\": \"teste\", \"price\": 150.0 }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8082/shopping"
+			},
+			"response": []
+		},
+		{
+			"name": "POST save shop barato",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"shopIdPastelDeFrango\", pm.response.json().id);",
+							"pm.test(\"Response status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Check if the response contains specified values and items\", function () {",
+							"    var responseData = pm.response.json();",
+							"",
+							"    // Verifica o valor de \"userIdentifier\"",
+							"    pm.expect(responseData.userIdentifier).to.eql(\"pasteldefrango\");",
+							"",
+							"    // Verifica os itens dentro do array \"items\"",
+							"    const expectedItems = [",
+							"        { productIdentifier: \"comprou\", price: 1.0 },",
+							"        { productIdentifier: \"porque\", price: 2.0 },",
+							"        { productIdentifier: \"quis\", price: 1.0 }",
+							"    ];",
+							"",
+							"    // Certifique-se de que o array \"items\" tem o mesmo tamanho",
+							"    pm.expect(responseData.items.length).to.eql(expectedItems.length);",
+							"",
+							"    // Valida cada item individualmente",
+							"    for (let i = 0; i < expectedItems.length; i++) {",
+							"        pm.expect(responseData.items[i].productIdentifier).to.eql(expectedItems[i].productIdentifier);",
+							"        pm.expect(responseData.items[i].price).to.eql(expectedItems[i].price);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"userIdentifier\": \"pasteldefrango\",\n  \"items\": [\n    { \"productIdentifier\": \"comprou\", \"price\": 1.0 },\n    { \"productIdentifier\": \"porque\", \"price\": 2.0 },\n    { \"productIdentifier\": \"quis\", \"price\": 1.0 }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8082/shopping"
+			},
+			"response": []
+		},
+		{
+			"name": "GET all shops",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check if one record contains the specified values\", function () {",
+							"    var responseData = pm.response.json();",
+							"",
+							"    // Define os valores esperados",
+							"    const expectedRecord = {",
+							"        userIdentifier: \"montanha\",",
+							"        items: [",
+							"            { productIdentifier: \"avalicao\", price: 100.0 },",
+							"            { productIdentifier: \"prova\", price: 200.0 },",
+							"            { productIdentifier: \"teste\", price: 150.0 }",
+							"        ]",
+							"    };",
+							"",
+							"    // Variável para sinalizar se o registro foi encontrado",
+							"    let recordFound = false;",
+							"",
+							"    // Itera sobre todos os registros do array",
+							"    responseData.forEach(record => {",
+							"        // Verifica o userIdentifier",
+							"        if (record.userIdentifier === expectedRecord.userIdentifier) {",
+							"            // Verifica se o array \"items\" é igual ao esperado",
+							"            let itemsMatch = true;",
+							"",
+							"            for (let i = 0; i < expectedRecord.items.length; i++) {",
+							"                const expectedItem = expectedRecord.items[i];",
+							"                const recordItem = record.items[i];",
+							"",
+							"                if (",
+							"                    !recordItem ||",
+							"                    recordItem.productIdentifier !== expectedItem.productIdentifier ||",
+							"                    recordItem.price !== expectedItem.price",
+							"                ) {",
+							"                    itemsMatch = false;",
+							"                    break;",
+							"                }",
+							"            }",
+							"",
+							"            // Se encontrar uma correspondência completa, marca como encontrado",
+							"            if (itemsMatch) {",
+							"                recordFound = true;",
+							"            }",
+							"        }",
+							"    });",
+							"",
+							"    // Valida se o registro foi encontrado",
+							"    pm.expect(recordFound).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8082/shopping"
+			},
+			"response": []
+		},
+		{
+			"name": "GET shop by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Check if the response contains specified values and items\", function () {",
+							"    var responseData = pm.response.json();",
+							"",
+							"    // Verifica o valor de \"userIdentifier\"",
+							"    pm.expect(responseData.userIdentifier).to.eql(\"montanha\");",
+							"",
+							"    // Verifica os itens dentro do array \"items\"",
+							"    const expectedItems = [",
+							"        { productIdentifier: \"avalicao\", price: 100.0 },",
+							"        { productIdentifier: \"prova\", price: 200.0 },",
+							"        { productIdentifier: \"teste\", price: 150.0 }",
+							"    ];",
+							"",
+							"    // Certifique-se de que o array \"items\" tem o mesmo tamanho",
+							"    pm.expect(responseData.items.length).to.eql(expectedItems.length);",
+							"",
+							"    // Valida cada item individualmente",
+							"    for (let i = 0; i < expectedItems.length; i++) {",
+							"        pm.expect(responseData.items[i].productIdentifier).to.eql(expectedItems[i].productIdentifier);",
+							"        pm.expect(responseData.items[i].price).to.eql(expectedItems[i].price);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8082/shopping/{{shopId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "GET shops by product identifier",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check if one record contains the specified values\", function () {",
+							"    var responseData = pm.response.json();",
+							"",
+							"    // Define os valores esperados",
+							"    const expectedRecord = {",
+							"        userIdentifier: \"montanha\",",
+							"        items: [",
+							"            { productIdentifier: \"avalicao\", price: 100.0 },",
+							"            { productIdentifier: \"prova\", price: 200.0 },",
+							"            { productIdentifier: \"teste\", price: 150.0 }",
+							"        ]",
+							"    };",
+							"",
+							"    // Variável para sinalizar se o registro foi encontrado",
+							"    let recordFound = false;",
+							"",
+							"    // Itera sobre todos os registros do array",
+							"    responseData.forEach(record => {",
+							"        // Verifica o userIdentifier",
+							"        if (record.userIdentifier === expectedRecord.userIdentifier) {",
+							"            // Verifica se o array \"items\" é igual ao esperado",
+							"            let itemsMatch = true;",
+							"",
+							"            for (let i = 0; i < expectedRecord.items.length; i++) {",
+							"                const expectedItem = expectedRecord.items[i];",
+							"                const recordItem = record.items[i];",
+							"",
+							"                if (",
+							"                    !recordItem ||",
+							"                    recordItem.productIdentifier !== expectedItem.productIdentifier ||",
+							"                    recordItem.price !== expectedItem.price",
+							"                ) {",
+							"                    itemsMatch = false;",
+							"                    break;",
+							"                }",
+							"            }",
+							"",
+							"            // Se encontrar uma correspondência completa, marca como encontrado",
+							"            if (itemsMatch) {",
+							"                recordFound = true;",
+							"            }",
+							"        }",
+							"    });",
+							"",
+							"    // Valida se o registro foi encontrado",
+							"    pm.expect(recordFound).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8082/shopping/product/prova"
+			},
+			"response": []
+		},
+		{
+			"name": "GET report by date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check if one record contains the specified values\", function () {",
+							"    var responseData = pm.response.json();",
+							"",
+							"    // Define os valores esperados",
+							"    const expectedRecord = {",
+							"        userIdentifier: \"montanha\",",
+							"        items: [",
+							"            { productIdentifier: \"avalicao\", price: 100.0 },",
+							"            { productIdentifier: \"prova\", price: 200.0 },",
+							"            { productIdentifier: \"teste\", price: 150.0 }",
+							"        ]",
+							"    };",
+							"",
+							"    // Variável para sinalizar se o registro foi encontrado",
+							"    let recordFound = false;",
+							"",
+							"    // Itera sobre todos os registros do array",
+							"    responseData.forEach(record => {",
+							"        // Verifica o userIdentifier",
+							"        if (record.userIdentifier === expectedRecord.userIdentifier) {",
+							"            // Verifica se o array \"items\" é igual ao esperado",
+							"            let itemsMatch = true;",
+							"",
+							"            for (let i = 0; i < expectedRecord.items.length; i++) {",
+							"                const expectedItem = expectedRecord.items[i];",
+							"                const recordItem = record.items[i];",
+							"",
+							"                if (",
+							"                    !recordItem ||",
+							"                    recordItem.productIdentifier !== expectedItem.productIdentifier ||",
+							"                    recordItem.price !== expectedItem.price",
+							"                ) {",
+							"                    itemsMatch = false;",
+							"                    break;",
+							"                }",
+							"            }",
+							"",
+							"            // Se encontrar uma correspondência completa, marca como encontrado",
+							"            if (itemsMatch) {",
+							"                recordFound = true;",
+							"            }",
+							"        }",
+							"    });",
+							"",
+							"    // Valida se o registro foi encontrado",
+							"    pm.expect(recordFound).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/shopping/report?startDate=2025-01-01T00:00:00&endDate=2025-12-31T23:59:59&dataInicio=2024-01-01T00:00:00&dataFim=2024-12-31T23:59:59",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"shopping",
+						"report"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2025-01-01T00:00:00"
+						},
+						{
+							"key": "endDate",
+							"value": "2025-12-31T23:59:59"
+						},
+						{
+							"key": "dataInicio",
+							"value": "2024-01-01T00:00:00"
+						},
+						{
+							"key": "dataFim",
+							"value": "2024-12-31T23:59:59"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET report by date old",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check if exist one record\", function () {",
+							"    var responseData = pm.response.json();",
+							"",
+							"    if (responseData.length = 0) pm.expect(true).to.be.true; ",
+							"    else pm.expect(false).to.be.false;",
+							"  ",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/shopping/report?startDate=2023-01-01T00:00:00&endDate=2023-12-31T23:59:59&dataInicio=2023-01-01T00:00:00&dataFim=2023-12-31T23:59:59",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"shopping",
+						"report"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2023-01-01T00:00:00"
+						},
+						{
+							"key": "endDate",
+							"value": "2023-12-31T23:59:59"
+						},
+						{
+							"key": "dataInicio",
+							"value": "2023-01-01T00:00:00"
+						},
+						{
+							"key": "dataFim",
+							"value": "2023-12-31T23:59:59"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET shops by filter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check if one record contains the specified values\", function () {",
+							"    var responseData = pm.response.json();",
+							"",
+							"    // Define os valores esperados",
+							"    const expectedRecord = {",
+							"        userIdentifier: \"montanha\",",
+							"        items: [",
+							"            { productIdentifier: \"avalicao\", price: 100.0 },",
+							"            { productIdentifier: \"prova\", price: 200.0 },",
+							"            { productIdentifier: \"teste\", price: 150.0 }",
+							"        ]",
+							"    };",
+							"",
+							"    // Variável para sinalizar se o registro foi encontrado",
+							"    let recordFound = false;",
+							"",
+							"    // Itera sobre todos os registros do array",
+							"    responseData.forEach(record => {",
+							"        // Verifica o userIdentifier",
+							"        if (record.userIdentifier === expectedRecord.userIdentifier) {",
+							"            // Verifica se o array \"items\" é igual ao esperado",
+							"            let itemsMatch = true;",
+							"",
+							"            for (let i = 0; i < expectedRecord.items.length; i++) {",
+							"                const expectedItem = expectedRecord.items[i];",
+							"                const recordItem = record.items[i];",
+							"",
+							"                if (",
+							"                    !recordItem ||",
+							"                    recordItem.productIdentifier !== expectedItem.productIdentifier ||",
+							"                    recordItem.price !== expectedItem.price",
+							"                ) {",
+							"                    itemsMatch = false;",
+							"                    break;",
+							"                }",
+							"            }",
+							"",
+							"            // Se encontrar uma correspondência completa, marca como encontrado",
+							"            if (itemsMatch) {",
+							"                recordFound = true;",
+							"            }",
+							"        }",
+							"        pm.expect(record.id).to.not.eql(pm.collectionVariables.get(\"shopIdPastelDeFrango\"))",
+							"    });",
+							"",
+							"    // Valida se o registro foi encontrado",
+							"    pm.expect(recordFound).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/shopping/search?startDate=2025-01-01T00:00:00&endDate=2025-12-31T23:59:59&minValue=300&dataInicio=2024-01-01&dataFim=2024-12-31&valorMinimo=300",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"shopping",
+						"search"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2025-01-01T00:00:00"
+						},
+						{
+							"key": "endDate",
+							"value": "2025-12-31T23:59:59"
+						},
+						{
+							"key": "minValue",
+							"value": "300"
+						},
+						{
+							"key": "dataInicio",
+							"value": "2024-01-01"
+						},
+						{
+							"key": "dataFim",
+							"value": "2024-12-31"
+						},
+						{
+							"key": "valorMinimo",
+							"value": "300"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET shops by date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check if one record contains the specified values\", function () {",
+							"    var responseData = pm.response.json();",
+							"",
+							"    // Define os valores esperados",
+							"    const expectedRecord = {",
+							"        userIdentifier: \"montanha\",",
+							"        items: [",
+							"            { productIdentifier: \"avalicao\", price: 100.0 },",
+							"            { productIdentifier: \"prova\", price: 200.0 },",
+							"            { productIdentifier: \"teste\", price: 150.0 }",
+							"        ]",
+							"    };",
+							"",
+							"    // Variável para sinalizar se o registro foi encontrado",
+							"    let recordFound = false;",
+							"",
+							"    // Itera sobre todos os registros do array",
+							"    responseData.forEach(record => {",
+							"        // Verifica o userIdentifier",
+							"        if (record.userIdentifier === expectedRecord.userIdentifier) {",
+							"            // Verifica se o array \"items\" é igual ao esperado",
+							"            let itemsMatch = true;",
+							"",
+							"            for (let i = 0; i < expectedRecord.items.length; i++) {",
+							"                const expectedItem = expectedRecord.items[i];",
+							"                const recordItem = record.items[i];",
+							"",
+							"                if (",
+							"                    !recordItem ||",
+							"                    recordItem.productIdentifier !== expectedItem.productIdentifier ||",
+							"                    recordItem.price !== expectedItem.price",
+							"                ) {",
+							"                    itemsMatch = false;",
+							"                    break;",
+							"                }",
+							"            }",
+							"",
+							"            // Se encontrar uma correspondência completa, marca como encontrado",
+							"            if (itemsMatch) {",
+							"                recordFound = true;",
+							"            }",
+							"        }",
+							"    });",
+							"",
+							"    // Valida se o registro foi encontrado",
+							"    pm.expect(recordFound).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/shopping/shopByDate?startDate=2025-01-01T00:00:00&endDate=2025-12-31T23:59:59",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"shopping",
+						"shopByDate"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2025-01-01T00:00:00"
+						},
+						{
+							"key": "endDate",
+							"value": "2025-12-31T23:59:59"
+						},
+						{
+							"key": "date",
+							"value": "2024-12-09T11:48:04.042",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET shops by user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check if one record contains the specified values\", function () {",
+							"    var responseData = pm.response.json();",
+							"",
+							"    // Define os valores esperados",
+							"    const expectedRecord = {",
+							"        userIdentifier: \"montanha\",",
+							"        items: [",
+							"            { productIdentifier: \"avalicao\", price: 100.0 },",
+							"            { productIdentifier: \"prova\", price: 200.0 },",
+							"            { productIdentifier: \"teste\", price: 150.0 }",
+							"        ]",
+							"    };",
+							"",
+							"    // Variável para sinalizar se o registro foi encontrado",
+							"    let recordFound = false;",
+							"",
+							"    // Itera sobre todos os registros do array",
+							"    responseData.forEach(record => {",
+							"        // Verifica o userIdentifier",
+							"        if (record.userIdentifier === expectedRecord.userIdentifier) {",
+							"            // Verifica se o array \"items\" é igual ao esperado",
+							"            let itemsMatch = true;",
+							"",
+							"            for (let i = 0; i < expectedRecord.items.length; i++) {",
+							"                const expectedItem = expectedRecord.items[i];",
+							"                const recordItem = record.items[i];",
+							"",
+							"                if (",
+							"                    !recordItem ||",
+							"                    recordItem.productIdentifier !== expectedItem.productIdentifier ||",
+							"                    recordItem.price !== expectedItem.price",
+							"                ) {",
+							"                    itemsMatch = false;",
+							"                    break;",
+							"                }",
+							"            }",
+							"",
+							"            // Se encontrar uma correspondência completa, marca como encontrado",
+							"            if (itemsMatch) {",
+							"                recordFound = true;",
+							"            }",
+							"        }",
+							"    });",
+							"",
+							"    // Valida se o registro foi encontrado",
+							"    pm.expect(recordFound).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/shopping/shopByUser?userIdentifier=montanha",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"shopping",
+						"shopByUser"
+					],
+					"query": [
+						{
+							"key": "userIdentifier",
+							"value": "montanha"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "shopId",
+			"value": ""
+		},
+		{
+			"key": "shopIdPastelDeFrango",
+			"value": ""
+		}
+	]
+}
