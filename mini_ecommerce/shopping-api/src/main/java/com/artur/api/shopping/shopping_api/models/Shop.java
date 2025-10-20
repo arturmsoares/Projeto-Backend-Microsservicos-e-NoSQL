@@ -1,6 +1,6 @@
 package com.artur.api.shopping.shopping_api.models;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +25,7 @@ public class Shop {
     @Field("userIdentifier")
     private String userIdentifier;
     @Field("date")
-    private LocalDate date;
+    private LocalDateTime date;
     @Field("items")
     private List<Item> items;
     @Field("total")

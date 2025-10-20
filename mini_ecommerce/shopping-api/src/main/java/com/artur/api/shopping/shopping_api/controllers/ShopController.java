@@ -1,6 +1,6 @@
 package com.artur.api.shopping.shopping_api.controllers;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artur.api.shopping.shopping_api.models.dto.ShopDTO;
-import com.artur.api.shopping.shopping_api.models.dto.ShopReportDTO;
 import com.artur.api.shopping.shopping_api.services.ShopService;
 
 @RestController
@@ -37,8 +36,9 @@ public class ShopController {
     }
 
     @GetMapping("/shopByDate")
-    public ResponseEntity<List<ShopDTO>> getShopsByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return ResponseEntity.ok(shopService.getByDate(date));
+    public ResponseEntity<List<ShopDTO>> getShopsByDate(
+            @RequestParam LocalDateTime startDate) {
+        return ResponseEntity.ok(shopService.getByDate(startDate));
     }
 
     @GetMapping("/{id}")
@@ -53,25 +53,20 @@ public class ShopController {
 
     @GetMapping("/search")
     public ResponseEntity<List<ShopDTO>> getShopsByFilter(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim,
-            @RequestParam(required = false) Float valorMinimo) {
+            @RequestParam LocalDateTime startDate,
+            @RequestParam LocalDateTime endDate,
+            @RequestParam Float minValue) {
         
-        // Se a data fim não for informada, usa a data atual
-        LocalDate finalDate = (dataFim != null) ? dataFim : LocalDate.now();
-        
-        return ResponseEntity.ok(shopService.getShopsByFilter(dataInicio, finalDate, valorMinimo));
+        return ResponseEntity.ok(shopService.getShopsByFilter(startDate, endDate, minValue));
     }
     
-    // Endpoint para o relatório
     @GetMapping("/report")
-    public ResponseEntity<ShopReportDTO> getReportByDate(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim) {
-        return ResponseEntity.ok(shopService.getReportByDate(dataInicio, dataFim));
+    public ResponseEntity<List<ShopDTO>> getReportByDate(
+            @RequestParam LocalDateTime startDate,
+            @RequestParam LocalDateTime endDate) {
+        return ResponseEntity.ok(shopService.getReportByDate(startDate, endDate));
     }
     
-    // Endpoint para busca por item
     @GetMapping("/product/{productIdentifier}")
     public ResponseEntity<List<ShopDTO>> findByProductIdentifier(@PathVariable String productIdentifier) {
         return ResponseEntity.ok(shopService.findByProductIdentifier(productIdentifier));

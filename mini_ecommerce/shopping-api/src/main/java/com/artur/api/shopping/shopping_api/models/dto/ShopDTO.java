@@ -1,6 +1,6 @@
 package com.artur.api.shopping.shopping_api.models.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +17,7 @@ public class ShopDTO {
 
     private String id;
     private String userIdentifier;
-    private LocalDate date;
+    private LocalDateTime date;
     private List<ItemDTO> items;
     private double total;
 
